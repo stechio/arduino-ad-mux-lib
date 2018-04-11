@@ -14,7 +14,7 @@ This library provides several examples that demonstrate its functionalities; the
 MCU pins are assigned to signal and channel control:
 
 ```cpp
-// Mux declared with analog input signal on pin A0 and control on digital pins 8, 9, 10 and 11.
+// Mux declared with analog input signal on pin A0 and channel control on digital pins 8, 9, 10 and 11.
 Type4067Mux mux(A0, INPUT, ANALOG, 8, 9, 10, 11);
 ```
 

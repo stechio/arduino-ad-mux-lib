@@ -28,7 +28,8 @@
 #define UNDEFINED -1
 
 /*
- * Macro: whether index value is defined (assuming natural integers as valid domain).
+ * Macro: whether index value is defined (assuming natural integers as valid
+ * domain).
  */
 #define IS_VALID_INDEX(x) x >= 0
 
@@ -67,8 +68,8 @@ public:
    *    ADC value - if the signal pin was set to ANALOG.
    *    {-1} - if the signal pin wasn't set.
    *
-   *  Side effects: in case the channel argument is defined, it becomes the current one
-   *  (same as invoking setChannel method).
+   *  Side effects: in case the channel argument is defined, it becomes the
+   *  current one (same as invoking setChannel method).
    */
   int16_t read(int8_t channel = UNDEFINED);
 
@@ -83,9 +84,9 @@ public:
   /*
    * Configures the signal pin.
    *
-   * As the same mux can be physically connected to multiple (mutually-exclusive)
-   * signal pins at once, this function takes care to electrically exclude
-   * previously-assigned signal pins.
+   * As the same mux can be physically connected to multiple (mutually-
+   * exclusive) signal pins at once, this function takes care to electrically
+   * exclude previously-assigned signal pins.
    *
    * Arguments:
    *    pin - MCU pin to which the mux signal pin connects.
@@ -107,8 +108,8 @@ public:
    *    {0} - if write succeeded.
    *    {-1} - if signal pin wasn't set to OUTPUT mode.
    *
-   *  Side effects: in case the channel argument is defined, it becomes the current one
-   *  (same as invoking setChannel method).
+   *  Side effects: in case the channel argument is defined, it becomes the
+   *  current one (same as invoking setChannel method).
    */
   uint8_t write(uint8_t data, int8_t channel = UNDEFINED);
 
@@ -121,8 +122,8 @@ private:
    * MCU selection pins.
    */
   /*
-   * NOTE: Fixed size, as dynamic allocation's overhead exceeds possible memory gains;
-   * the actual number of pins is defined by selectionPinsCount field.
+   * NOTE: Fixed size, as dynamic allocation's overhead exceeds possible memory
+   * gains; the actual number of pins is defined by selectionPinsCount field.
    */
   uint8_t selectionPins[4];
   /*

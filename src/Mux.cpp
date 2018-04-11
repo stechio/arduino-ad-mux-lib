@@ -28,8 +28,8 @@ Mux::Mux(int8_t selectionPins[], uint8_t selectionPinsLength) {
   }
 }
 
-Mux::Mux(int8_t selectionPins[], uint8_t selectionPinsLength, uint8_t signalPin,
-    uint8_t signalMode, uint8_t signalType) :
+Mux::Mux(uint8_t signalPin, uint8_t signalMode, uint8_t signalType,
+    int8_t selectionPins[], uint8_t selectionPinsLength) :
     Mux::Mux(selectionPins, selectionPinsLength) {
   Mux::setSignalPin(signalPin, signalMode, signalType);
 }
@@ -63,9 +63,9 @@ void Mux::setChannel(uint8_t value) {
 void Mux::setSignalPin(uint8_t pin, uint8_t mode, uint8_t type) {
   // Another pin already assigned to signal?
   /*
-   * NOTE: The same mux can be physically connected to multiple (mutually-exclusive)
-   * signal pins at once; this function takes care to electrically exclude previously-
-   * selected pins.
+   * NOTE: The same mux can be physically connected to multiple (mutually-
+   * exclusive) signal pins at once; this function takes care to electrically
+   * exclude previously-selected pins.
    */
   if (IS_VALID_INDEX(this->signalPin) && this->signalPin != pin) {
     // Put the old signal pin in high impedance state!
