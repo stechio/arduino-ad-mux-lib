@@ -8,34 +8,32 @@
  *    This library is licensed under the MIT license
  *    http://www.opensource.org/licenses/mit-license.php
  *
- * Filename: Type4067Mux.h
+ * Filename: GenericMux.h
  * Version: 2.0
  * Author: Stefano Chizzolini
  */
 
-#ifndef Type4067Mux_h
-#define Type4067Mux_h
+#ifndef GenericMux_h
+#define GenericMux_h
 
 #include <Arduino.h>
-#include <Series4000Mux.h>
+#include <Mux.h>
 
-class Type4067Mux: public Series4000Mux {
+class GenericMux: public Mux {
 public:
   /*
-   * Creates a Type4067Mux instance.
+   * Creates a GenericMux instance.
    *
    * Arguments:
    *    selectionPin0 - MCU pin to which the mux selection pin S0 connects.
    *    selectionPin1-selectionPin3 - (Optional) MCU pins to which the mux
    *        selection pins S1-S3 connect.
-   *    enablePin - (Optional) MCU pin to which the mux enable pin connects.
    */
-  Type4067Mux(uint8_t selectionPin0, int8_t selectionPin1 = UNDEFINED,
-      int8_t selectionPin2 = UNDEFINED, int8_t selectionPin3 = UNDEFINED,
-      int8_t enablePin = UNDEFINED);
+  GenericMux(uint8_t selectionPin0, int8_t selectionPin1 = UNDEFINED,
+      int8_t selectionPin2 = UNDEFINED, int8_t selectionPin3 = UNDEFINED);
 
   /*
-   * Creates a Type4067Mux instance.
+   * Creates a GenericMux instance.
    *
    * Arguments:
    *    signalPin - MCU pin to which the mux signal pin Z connects.
@@ -44,12 +42,13 @@ public:
    *    selectionPin0 - MCU pin to which the mux selection pin S0 connects.
    *    selectionPin1-selectionPin3 - (Optional) MCU pins to which the mux
    *        selection pins S1-S3 connect.
-   *    enablePin - (Optional) MCU pin to which the mux enable pin connects.
    */
-  Type4067Mux(uint8_t signalPin, uint8_t signalMode, uint8_t signalType,
+  GenericMux(uint8_t signalPin, uint8_t signalMode, uint8_t signalType,
       uint8_t selectionPin0, int8_t selectionPin1 = UNDEFINED,
-      int8_t selectionPin2 = UNDEFINED, int8_t selectionPin3 = UNDEFINED,
-      int8_t enablePin = UNDEFINED);
+      int8_t selectionPin2 = UNDEFINED, int8_t selectionPin3 = UNDEFINED);
+
+  // (Override)
+  void setEnabled(bool value);
 
 private:
 };

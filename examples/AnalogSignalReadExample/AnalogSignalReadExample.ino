@@ -5,10 +5,12 @@
  * 74HC4067 mux.
  * 
  * ------------------------------------------------------------
- * Author: Nick Lamprianidis (adaptation by Stefano Chizzolini)
  * Project: arduino-ad-mux-lib
- * Version: 1.0
  * Source: https://github.com/stechio/arduino-ad-mux-lib.git
+ *
+ * Filename: AnalogSignalReadExample.ino
+ * Version: 1.0
+ * Author: Nick Lamprianidis (adaptation by Stefano Chizzolini)
  */
 
 #include "Type4067Mux.h"

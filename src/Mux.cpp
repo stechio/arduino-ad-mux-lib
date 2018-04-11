@@ -1,6 +1,5 @@
 /**
  * Project: arduino-ad-mux-lib
- * Version: 1.0
  * Source: https://github.com/stechio/arduino-ad-mux-lib.git
  *
  * Copyright (c) 2018 Stefano Chizzolini (arduino-ad-mux-lib)
@@ -11,31 +10,34 @@
  *    http://www.opensource.org/licenses/mit-license.php
  *
  * Filename: Mux.cpp
+ * Version: 2.0
  * Author: Stefano Chizzolini, Nick Lamprianidis
  */
 
 #include "Mux.h"
 
-Mux::Mux(int8_t selectionPins[], uint8_t selectionPinsLength) {
+Mux::Mux(int8_t selectionPins[], uint8_t selectionPinsLength,
+    int8_t enablePin) {
   selectionPinsCount = selectionPinsLength;
   for (uint8_t i = 0; i < selectionPinsLength; i++) {
-    if (IS_VALID_INDEX(selectionPins[i])) {
+    if (IS_DEFINED(selectionPins[i])) {
       pinMode(this->selectionPins[i] = selectionPins[i], OUTPUT);
     } else {
       selectionPinsCount = i;
       break;
     }
   }
+  this->enablePin = enablePin;
 }
 
 Mux::Mux(uint8_t signalPin, uint8_t signalMode, uint8_t signalType,
-    int8_t selectionPins[], uint8_t selectionPinsLength) :
-    Mux::Mux(selectionPins, selectionPinsLength) {
+    int8_t selectionPins[], uint8_t selectionPinsLength, int8_t enablePin) :
+    Mux::Mux(selectionPins, selectionPinsLength, enablePin) {
   Mux::setSignalPin(signalPin, signalMode, signalType);
 }
 
 int16_t Mux::read(int8_t channel) {
-  if (IS_VALID_INDEX(channel)) {
+  if (IS_DEFINED(channel)) {
     setChannel(channel);
   }
 
@@ -67,7 +69,7 @@ void Mux::setSignalPin(uint8_t pin, uint8_t mode, uint8_t type) {
    * exclusive) signal pins at once; this function takes care to electrically
    * exclude previously-selected pins.
    */
-  if (IS_VALID_INDEX(this->signalPin) && this->signalPin != pin) {
+  if (IS_DEFINED(this->signalPin) && this->signalPin != pin) {
     // Put the old signal pin in high impedance state!
     if (this->signalMode == OUTPUT) {
       digitalWrite(this->signalPin, LOW);
@@ -109,7 +111,7 @@ uint8_t Mux::write(uint8_t data, int8_t channel) {
   if (signalMode != OUTPUT)
     return -1;
 
-  if (IS_VALID_INDEX(channel)) {
+  if (IS_DEFINED(channel)) {
     setChannel(channel);
   }
 

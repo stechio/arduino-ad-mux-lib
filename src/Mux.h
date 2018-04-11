@@ -1,6 +1,5 @@
 /**
  * Project: arduino-ad-mux-lib
- * Version: 1.0
  * Source: https://github.com/stechio/arduino-ad-mux-lib.git
  *
  * Copyright (c) 2018 Stefano Chizzolini (arduino-ad-mux-lib)
@@ -11,6 +10,7 @@
  *    http://www.opensource.org/licenses/mit-license.php
  *
  * Filename: Mux.h
+ * Version: 2.0
  * Author: Stefano Chizzolini, Nick Lamprianidis
  */
 
@@ -18,20 +18,7 @@
 #define Mux_h
 
 #include <Arduino.h>
-
-#define ANALOG 0
-#define DIGITAL 1
-
-/*
- * Undefined index value.
- */
-#define UNDEFINED -1
-
-/*
- * Macro: whether index value is defined (assuming natural integers as valid
- * domain).
- */
-#define IS_VALID_INDEX(x) x >= 0
+#include "Defs.h"
 
 class Mux {
 public:
@@ -41,8 +28,10 @@ public:
    * Arguments:
    *    selectionPins - MCU pins to which the mux selection pins connect.
    *    selectionPinsLength - MCU pins array size.
+   *    enablePin - (Optional) MCU pin to which the mux enable pin connects.
    */
-  Mux(int8_t selectionPins[], uint8_t selectionPinsLength);
+  Mux(int8_t selectionPins[], uint8_t selectionPinsLength, int8_t enablePin =
+  UNDEFINED);
 
   /*
    * Creates a Mux instance.
@@ -53,9 +42,11 @@ public:
    *    signalType - {DIGITAL, ANALOG}
    *    selectionPins - MCU pins to which the mux selection pins connect.
    *    selectionPinsLength - MCU pins array size.
+   *    enablePin - (Optional) MCU pin to which the mux enable pin connects.
    */
   Mux(uint8_t signalPin, uint8_t signalMode, uint8_t signalType,
-      int8_t selectionPins[], uint8_t selectionPinsLength);
+      int8_t selectionPins[], uint8_t selectionPinsLength, int8_t enablePin =
+      UNDEFINED);
 
   /*
    * Reads from the given channel.
@@ -80,6 +71,11 @@ public:
    *    value - Channel to select.
    */
   void setChannel(uint8_t value);
+
+  /*
+   * Sets whether the mux signal is enabled.
+   */
+  virtual void setEnabled(bool value) = 0;
 
   /*
    * Configures the signal pin.
@@ -113,11 +109,19 @@ public:
    */
   uint8_t write(uint8_t data, int8_t channel = UNDEFINED);
 
-private:
+protected:
   /*
    * Current mux channel.
    */
   int8_t channel = UNDEFINED;
+  /*
+   * Mux signal enabled status.
+   */
+  int8_t enabled = UNDEFINED;
+  /*
+   * MCU enable pin.
+   */
+  int8_t enablePin = UNDEFINED;
   /*
    * MCU selection pins.
    */

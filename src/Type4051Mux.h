@@ -1,6 +1,5 @@
 /**
  * Project: arduino-ad-mux-lib
- * Version: 1.0
  * Source: https://github.com/stechio/arduino-ad-mux-lib.git
  *
  * Copyright (c) 2018 Stefano Chizzolini
@@ -10,6 +9,7 @@
  *    http://www.opensource.org/licenses/mit-license.php
  *
  * Filename: Type4051Mux.h
+ * Version: 2.0
  * Author: Stefano Chizzolini
  */
 
@@ -17,9 +17,9 @@
 #define Type4051Mux_h
 
 #include <Arduino.h>
-#include <Mux.h>
+#include <Series4000Mux.h>
 
-class Type4051Mux: public Mux {
+class Type4051Mux: public Series4000Mux {
 public:
   /*
    * Creates a Type4051Mux instance.
@@ -30,9 +30,10 @@ public:
    *        connects.
    *    selectionPin2 - (Optional) MCU pin to which the mux selection pin C
    *        connects.
+   *    enablePin - (Optional) MCU pin to which the mux enable pin connects.
    */
   Type4051Mux(uint8_t selectionPin0, int8_t selectionPin1 = UNDEFINED,
-      int8_t selectionPin2 = UNDEFINED);
+      int8_t selectionPin2 = UNDEFINED, int8_t enablePin = UNDEFINED);
   /*
    * Creates a Type4051Mux instance.
    *
@@ -45,10 +46,11 @@ public:
    *        connects.
    *    selectionPin2 - (Optional) MCU pin to which the mux selection pin C
    *        connects.
+   *    enablePin - (Optional) MCU pin to which the mux enable pin connects.
    */
   Type4051Mux(uint8_t signalPin, uint8_t signalMode, uint8_t signalType,
       uint8_t selectionPin0, int8_t selectionPin1 = UNDEFINED,
-      int8_t selectionPin2 = UNDEFINED);
+      int8_t selectionPin2 = UNDEFINED, int8_t enablePin = UNDEFINED);
 
 private:
 };
