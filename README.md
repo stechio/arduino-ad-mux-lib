@@ -5,7 +5,7 @@ This library was forked from project MUX74HC4067 (https://github.com/nlamprian/M
 
 ## Getting started
 
-Currently, two common ICs are explicitly implemented (`Type4051Mux` and `Type4067Mux`); others can be controlled through the generic base class (`Mux`).
+Currently, two common ICs are explicitly implemented (`Type4051Mux` and `Type4067Mux`); others can be controlled through the generic class (`GenericMux`).
 
 This library provides several examples that demonstrate its functionalities; they all revolve around the same simple life cycle: 
 

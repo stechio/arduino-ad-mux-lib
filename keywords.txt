@@ -2,7 +2,9 @@
 
 # Datatypes (KEYWORD1)
 
+GenericMux	KEYWORD1
 Mux	KEYWORD1
+Series4000Mux	KEYWORD1
 Type4051Mux	KEYWORD1
 Type4067Mux	KEYWORD1
 
@@ -10,6 +12,7 @@ Type4067Mux	KEYWORD1
 
 read	KEYWORD2
 setChannel	KEYWORD2
+setEnabled	KEYWORD2
 setSignalPin	KEYWORD2
 write	KEYWORD2
 
