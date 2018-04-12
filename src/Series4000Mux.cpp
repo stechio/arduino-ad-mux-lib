@@ -27,8 +27,9 @@ Series4000Mux::Series4000Mux(uint8_t signalPin, uint8_t signalMode,
         selectionPinsLength, enablePin) {
 }
 
-void Series4000Mux::setEnabled(bool value) {
+int8_t Series4000Mux::setEnabled(bool value) {
   if (IS_DEFINED(enablePin)) {
     digitalWrite(enablePin, enabled = value ? LOW : HIGH);
   }
+  return 0;
 }

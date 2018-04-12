@@ -28,6 +28,7 @@ GenericMux::GenericMux(uint8_t signalPin, uint8_t signalMode,
   setSignalPin(signalPin, signalMode, signalType);
 }
 
-void GenericMux::setEnabled(bool value) {
+int8_t GenericMux::setEnabled(bool value) {
   /* NOOP: Unsupported operation. */
+  return -1;
 }

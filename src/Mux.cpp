@@ -51,18 +51,18 @@ int16_t Mux::read(int8_t channel) {
   }
 }
 
-void Mux::setChannel(uint8_t value) {
-  if (value == channel)
-    return;
-
-  channel = value;
-  for (uint8_t i = 0; i < selectionPinsCount; i++) {
-    digitalWrite(selectionPins[i], value & 0x01);
-    value >>= 1;
+int8_t Mux::setChannel(uint8_t value) {
+  if (value != channel) {
+    channel = value;
+    for (uint8_t i = 0; i < selectionPinsCount; i++) {
+      digitalWrite(selectionPins[i], value & 0x01);
+      value >>= 1;
+    }
   }
+  return 0;
 }
 
-void Mux::setSignalPin(uint8_t pin, uint8_t mode, uint8_t type) {
+int8_t Mux::setSignalPin(uint8_t pin, uint8_t mode, uint8_t type) {
   // Another pin already assigned to signal?
   /*
    * NOTE: The same mux can be physically connected to multiple (mutually-
@@ -105,9 +105,11 @@ void Mux::setSignalPin(uint8_t pin, uint8_t mode, uint8_t type) {
     break;
   }
   this->signalType = type;
+
+  return 0;
 }
 
-uint8_t Mux::write(uint8_t data, int8_t channel) {
+int8_t Mux::write(uint8_t data, int8_t channel) {
   if (signalMode != OUTPUT)
     return -1;
 

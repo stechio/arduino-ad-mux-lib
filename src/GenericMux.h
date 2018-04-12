@@ -48,7 +48,7 @@ public:
       int8_t selectionPin2 = UNDEFINED, int8_t selectionPin3 = UNDEFINED);
 
   // (Override)
-  void setEnabled(bool value);
+  int8_t setEnabled(bool value);
 
 private:
 };

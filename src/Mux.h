@@ -53,29 +53,32 @@ public:
    *
    * Arguments:
    *    channel - (Optional) Channel to read from. Default: current channel.
-   *
    * Returns:
-   *    {HIGH, LOW} - if the signal pin was set to DIGITAL.
-   *    ADC value - if the signal pin was set to ANALOG.
-   *    {-1} - if the signal pin wasn't set.
-   *
-   *  Side effects: in case the channel argument is defined, it becomes the
-   *  current one (same as invoking setChannel method).
+   *    {HIGH, LOW} - if signal pin was set to DIGITAL.
+   *    ADC value - if signal pin was set to ANALOG.
+   *    {-1} - if signal pin wasn't set.
+   * Side effects: in case the channel argument is defined, it becomes the
+   *    current one (same as invoking setChannel method).
    */
   int16_t read(int8_t channel = UNDEFINED);
 
   /*
    * Selects the given channel.
    *
-   * Arguments:
-   *    value - Channel to select.
+   * Returns:
+   *    {0} - if operation succeeded.
+   *    {-1} - if operation failed.
    */
-  void setChannel(uint8_t value);
+  int8_t setChannel(uint8_t value);
 
   /*
    * Sets whether the mux signal is enabled.
+   *
+   * Returns:
+   *    {0} - if operation succeeded.
+   *    {-1} - if operation failed.
    */
-  virtual void setEnabled(bool value) = 0;
+  virtual int8_t setEnabled(bool value) = 0;
 
   /*
    * Configures the signal pin.
@@ -88,8 +91,11 @@ public:
    *    pin - MCU pin to which the mux signal pin connects.
    *    mode - {INPUT, OUTPUT, INPUT_PULLUP}
    *    type - {DIGITAL, ANALOG}
+   * Returns:
+   *    {0} - if operation succeeded.
+   *    {-1} - if operation failed.
    */
-  void setSignalPin(uint8_t pin, uint8_t mode, uint8_t type);
+  int8_t setSignalPin(uint8_t pin, uint8_t mode, uint8_t type);
 
   /*
    * Writes to the given channel.
@@ -99,15 +105,13 @@ public:
    *      {HIGH, LOW} - if the signal pin was set to DIGITAL.
    *      PWM value - if the signal pin was set to ANALOG.
    *    channel - (Optional) Channel to write to. Default: current channel.
-   *
-   *  Returns:
-   *    {0} - if write succeeded.
-   *    {-1} - if signal pin wasn't set to OUTPUT mode.
-   *
-   *  Side effects: in case the channel argument is defined, it becomes the
-   *  current one (same as invoking setChannel method).
+   * Returns:
+   *    {0} - if operation succeeded.
+   *    {-1} - if wrong signal mode (MUST be OUTPUT).
+   * Side effects: in case the channel argument is defined, it becomes the
+   *    current one (same as invoking setChannel method).
    */
-  uint8_t write(uint8_t data, int8_t channel = UNDEFINED);
+  int8_t write(uint8_t data, int8_t channel = UNDEFINED);
 
 protected:
   /*

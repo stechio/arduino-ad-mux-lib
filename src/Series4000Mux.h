@@ -48,7 +48,7 @@ public:
       UNDEFINED);
 
   // (Override)
-  void setEnabled(bool value);
+  int8_t setEnabled(bool value);
 
 private:
 };
