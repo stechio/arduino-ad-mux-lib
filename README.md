@@ -1,5 +1,5 @@
 # arduino-ad-mux-lib
-Arduino library for controlling [analog/digital multiplexers](https://en.wikipedia.org/wiki/Multiplexer) (A/D mux) like those belonging to the CMOS 4000 series (e.g. 4051 (74HC4051), 4067 (74HC4067)).
+Arduino library for controlling [analog/digital multiplexers](https://en.wikipedia.org/wiki/Multiplexer) (A/D mux) like those belonging to the CMOS 4000 series (e.g. 4051 (CD4051, 74HC4051), 4067 (CD4067, 74HC4067)).
 
 This library was forked from project MUX74HC4067 (https://github.com/nlamprian/MUX74HC4067) in order to generalize and streamline its functionalities at both interface and implementation levels.
 
@@ -41,6 +41,8 @@ int16_t data = mux.read(2);
 ## Advanced use
 
 *The same mux can be physically connected to multiple signal pins at once*, as any invocation to `setSignalPin` method ensures that the previous pin is set to high impedance state before switching to the new one.
+
+Conversely, *the same signal pin can be physically connected to multiple ICs through a common data line*, as `setEnabled` method controls whether the mux I/O operates.
 
 ## Repository
 
