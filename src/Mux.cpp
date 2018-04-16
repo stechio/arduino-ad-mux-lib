@@ -10,7 +10,7 @@
  *    http://www.opensource.org/licenses/mit-license.php
  *
  * Filename: Mux.cpp
- * Version: 2.0
+ * Version: 2.0.1
  * Author: Stefano Chizzolini, Nick Lamprianidis
  */
 
