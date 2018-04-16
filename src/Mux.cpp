@@ -55,8 +55,7 @@ int8_t Mux::setChannel(uint8_t value) {
   if (value != channel) {
     channel = value;
     for (uint8_t i = 0; i < selectionPinsCount; i++) {
-      digitalWrite(selectionPins[i], value & 0x01);
-      value >>= 1;
+      digitalWrite(selectionPins[i], value >> i & 0x01);
     }
   }
   return 0;
