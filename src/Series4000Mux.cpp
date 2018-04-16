@@ -23,8 +23,8 @@ Series4000Mux::Series4000Mux(int8_t selectionPins[],
 Series4000Mux::Series4000Mux(uint8_t signalPin, uint8_t signalMode,
     uint8_t signalType, int8_t selectionPins[], uint8_t selectionPinsLength,
     int8_t enablePin) :
-    Series4000Mux(signalPin, signalMode, signalType, selectionPins,
-        selectionPinsLength, enablePin) {
+    Mux(signalPin, signalMode, signalType, selectionPins, selectionPinsLength,
+        enablePin) {
 }
 
 int8_t Series4000Mux::setEnabled(bool value) {
