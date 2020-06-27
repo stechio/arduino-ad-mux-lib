@@ -118,7 +118,11 @@ int8_t Mux::write(uint8_t data, int8_t channel) {
 
   switch (signalType) {
   case ANALOG:
-    analogWrite(signalPin, data);
+    #if defined(ARDUINO_ARCH_ESP32)
+	    ledcWrite(signalPin, data);
+	#else
+		analogWrite(signalPin, data);
+	#endif
     break;
   case DIGITAL:
     digitalWrite(signalPin, data);
