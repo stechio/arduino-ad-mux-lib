@@ -1,48 +1,51 @@
 # arduino-ad-mux-lib
-Arduino library for controlling [analog/digital multiplexers](https://en.wikipedia.org/wiki/Multiplexer) (A/D mux) like those belonging to the CMOS 4000 series (e.g. 4051 (CD4051, 74HC4051), 4067 (CD4067, 74HC4067)).
+Arduino library for controlling [analog/digital multiplexers](https://en.wikipedia.org/wiki/Multiplexer) (A/D mux) of arbitrary size, like CMOS 4000 series (e.g. 8-channel 4051 (CD4051, 74HC4051), 16-channel 4067 (CD4067, 74HC4067)), 32-channel MegaMUX (ADG732), and so on.
 
 This library was forked from project MUX74HC4067 (https://github.com/nlamprian/MUX74HC4067) in order to generalize and streamline its functionalities at both interface and implementation levels.
 
 ## Getting started
 
-Currently, two common ICs are explicitly implemented (`Type4051Mux` and `Type4067Mux`); others can be controlled through the generic class (`GenericMux`).
+Currently, all ICs are supported by a common implementation (`Mux`).
 
 This library provides several examples that demonstrate its functionalities; they all revolve around the same simple life cycle: 
 
-1. Object initialization
-
-MCU pins are assigned to signal and channel control:
+<ol>
+<li>Initialization
+<p>MCU pins are assigned to signal and channel control:</p>
 
 ```cpp
-// Mux declared with analog input signal on pin A0 and channel control on digital pins 8, 9, 10 and 11.
-Type4067Mux mux(A0, INPUT, ANALOG, 8, 9, 10, 11);
+using namespace admux;
+
+// 16-channel Mux declared with analog input signal on pin A0 and channel control on digital pins 8, 9, 10 and 11.
+Mux mux(Pin(A0, Input, Analog), {8, 9, 10, 11});
 ```
 
-The signal pin can also be assigned (and possibly replaced) through the `setSignalPin` method.
-
-2. Object I/O 
-
-After selecting the channel, read/write operations can be invoked:
+The signal pin can also be assigned (and possibly replaced) through the `signalPin(..)` method.
+</li>
+<li>I/O
+<p>After selecting the channel, read/write operations can be invoked:</p>
 
 ```cpp
 // Select 3rd channel!
-mux.setChannel(2);
+mux.channel(2);
 // Read data from the current channel (that is 3rd)!
 int16_t data = mux.read();
 ```
 
-Alternatively, the channel can be directly specified within the read/write operation:
+<p>Alternatively, the channel can be directly specified within the read/write operation:</p>
 
 ```cpp
 // Read data from the 3rd channel!
 int16_t data = mux.read(2);
 ```
 
+</li></ol>
+
 ## Advanced use
 
-*The same mux can be physically connected to multiple signal pins at once*, as any invocation to `setSignalPin` method ensures that the previous pin is set to high impedance state before switching to the new one.
+*The same mux can be physically connected to multiple signal pins at once*, as any invocation to `signalPin(..)` method ensures that the previous pin is set to high impedance state before switching to the new one.
 
-Conversely, *the same signal pin can be physically connected to multiple ICs through a common data line*, as `setEnabled` method controls whether the mux I/O operates.
+Conversely, *the same signal pin can be physically connected to multiple ICs through a common data line*, as `enabled(..)` method controls whether the mux I/O operates.
 
 ## Repository
 

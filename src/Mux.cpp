@@ -8,125 +8,128 @@
  * License:
  *    This library is licensed under the MIT license
  *    http://www.opensource.org/licenses/mit-license.php
- *
- * Filename: Mux.cpp
- * Version: 2.0.1
- * Author: Stefano Chizzolini, Nick Lamprianidis
  */
 
 #include "Mux.h"
 
-Mux::Mux(int8_t selectionPins[], uint8_t selectionPinsLength,
-    int8_t enablePin) {
-  selectionPinsCount = selectionPinsLength;
-  for (uint8_t i = 0; i < selectionPinsLength; i++) {
-    if (IS_DEFINED(selectionPins[i])) {
-      pinMode(this->selectionPins[i] = selectionPins[i], OUTPUT);
-    } else {
-      selectionPinsCount = i;
+using namespace admux;
+
+Mux::Mux(std::initializer_list<int8_t> channelPins, int8_t enablePin,
+    int8_t writePin) {
+  for (auto channelPin : channelPins) {
+    if (!IS_DEFINED(channelPin))
       break;
-    }
+
+    m_channelPins.push_back(channelPin);
+    pinMode(channelPin, Output);
   }
-  this->enablePin = enablePin;
+  m_channelCount = (1 << m_channelPins.size());
+
+  if (IS_DEFINED(enablePin)) {
+    pinMode(m_enablePin = enablePin, PinMode::Output);
+  }
+  if (IS_DEFINED(writePin)) {
+    pinMode(m_writePin = writePin, PinMode::Output);
+  }
 }
 
-Mux::Mux(uint8_t signalPin, uint8_t signalMode, uint8_t signalType,
-    int8_t selectionPins[], uint8_t selectionPinsLength, int8_t enablePin) :
-    Mux::Mux(selectionPins, selectionPinsLength, enablePin) {
-  Mux::setSignalPin(signalPin, signalMode, signalType);
+Mux::Mux(Pin signalPin, std::initializer_list<int8_t> channelPins,
+    int8_t enablePin, int8_t writePin) :
+    Mux::Mux(channelPins, enablePin, writePin) {
+  Mux::signalPin(signalPin);
 }
 
 int16_t Mux::read(int8_t channel) {
   if (IS_DEFINED(channel)) {
-    setChannel(channel);
+    this->channel(channel);
   }
 
-  switch (signalType) {
-  case ANALOG:
-    return analogRead(signalPin);
-  case DIGITAL:
-    return digitalRead(signalPin);
-  default:
-    return -1;
+  switch (m_signalPin.type) {
+    case Analog:
+      return analogRead(m_signalPin.pin);
+    case Digital:
+      return digitalRead(m_signalPin.pin);
+    default:
+      return ERROR_UNHANDLED_OPERATION;
   }
 }
 
-int8_t Mux::setChannel(uint8_t value) {
-  if (value != channel) {
-    channel = value;
-    for (uint8_t i = 0; i < selectionPinsCount; i++) {
-      digitalWrite(selectionPins[i], value >> i & 0x01);
-    }
+int8_t Mux::channel(int8_t value) {
+  if (value == m_channel)
+    return ERROR_SUCCESS;
+  else if (value > m_channelCount)
+    return ERROR_OUT_OF_RANGE;
+
+  /*
+   * NOTE: When WR is low, the channel control pins control which state the
+   * switches are in. On the rising edge of WR, the channel control data is
+   * latched (see ADG726/ADG732).
+   */
+  if (IS_DEFINED(m_writePin)) {
+    digitalWrite(m_writePin, LOW);
   }
-  return 0;
+  m_channel = value;
+  for (uint8_t i = 0; i < m_channelPins.size(); i++) {
+    digitalWrite(m_channelPins[i], bitRead(value, i));
+  }
+  if (IS_DEFINED(m_writePin)) {
+    digitalWrite(m_writePin, HIGH);
+  }
+  return ERROR_SUCCESS;
 }
 
-int8_t Mux::setSignalPin(uint8_t pin, uint8_t mode, uint8_t type) {
+int8_t Mux::enabled(bool value) {
+  if (!IS_DEFINED(m_enablePin))
+    return ERROR_UNDEFINED_PIN;
+
+  digitalWrite(m_enablePin, m_enabled = value ? LOW : HIGH);
+  return ERROR_SUCCESS;
+}
+
+int8_t Mux::signalPin(Pin value) {
   // Another pin already assigned to signal?
   /*
    * NOTE: The same mux can be physically connected to multiple (mutually-
    * exclusive) signal pins at once; this function takes care to electrically
    * exclude previously-selected pins.
    */
-  if (IS_DEFINED(this->signalPin) && this->signalPin != pin) {
+  if (IS_DEFINED(m_signalPin.pin) && m_signalPin.pin != value.pin) {
     // Put the old signal pin in high impedance state!
-    if (this->signalMode == OUTPUT) {
-      digitalWrite(this->signalPin, LOW);
+    if (m_signalPin.mode == Output) {
+      digitalWrite(m_signalPin.pin, LOW);
     }
-    pinMode(this->signalPin, INPUT);
+    pinMode(m_signalPin.pin, Input);
   }
 
-  switch (mode) {
-  case INPUT:
+  m_signalPin = value;
+  if (m_signalPin.mode == Input) {
     // Disable pullup!
     /* SEE: https://www.arduino.cc/en/Tutorial/DigitalPins */
-    digitalWrite(pin, LOW);
-    break;
-  case INPUT_PULLUP:
-    /* NOOP */
-    break;
-  case OUTPUT:
-    /* NOOP */
-    break;
-  default:
-    mode = OUTPUT;
-    break;
+    digitalWrite(m_signalPin.pin, LOW);
   }
-  pinMode(this->signalPin = pin, this->signalMode = mode);
-
-  switch (type) {
-  case ANALOG:
-  case DIGITAL:
-    /* NOOP */
-    break;
-  default:
-    type = DIGITAL;
-    break;
-  }
-  this->signalType = type;
-
-  return 0;
+  pinMode(m_signalPin.pin, m_signalPin.mode);
+  return ERROR_SUCCESS;
 }
 
 int8_t Mux::write(uint8_t data, int8_t channel) {
-  if (signalMode != OUTPUT)
-    return -1;
+  if (m_signalPin.mode != Output)
+    return ERROR_WRONG_SIGNAL_MODE;
 
   if (IS_DEFINED(channel)) {
-    setChannel(channel);
+    this->channel(channel);
   }
 
-  switch (signalType) {
-  case ANALOG:
-    #if defined(ARDUINO_ARCH_ESP32)
-    ledcWrite(signalPin, data);
-    #else
-    analogWrite(signalPin, data);
-    #endif
-    break;
-  case DIGITAL:
-    digitalWrite(signalPin, data);
-    break;
+  switch (m_signalPin.type) {
+    case Analog:
+#if defined(ARDUINO_ARCH_ESP32)
+      ledcWrite(m_signalPin.pin, data);
+#else
+      analogWrite(m_signalPin.pin, data);
+#endif
+      break;
+    case Digital:
+      digitalWrite(m_signalPin.pin, data);
+      break;
   }
-  return 0;
+  return ERROR_SUCCESS;
 }

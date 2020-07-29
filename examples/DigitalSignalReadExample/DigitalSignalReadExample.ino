@@ -8,20 +8,20 @@
  * Project: arduino-ad-mux-lib
  * Source: https://github.com/stechio/arduino-ad-mux-lib.git
  *
- * Filename: DigitalSignalReadExample.ino
- * Version: 1.0
  * Author: Nick Lamprianidis (adaptation by Stefano Chizzolini)
  */
 
-#include "Type4067Mux.h"
+#include "Mux.h"
+
+using namespace admux;
 
 /*
- * Creates a Type4067Mux instance.
+ * Creates a Mux instance.
  *
- * 1st-3rd arguments initialize SIG pin (digital input on Arduino PIN 3).
- * 4th-7th arguments are the Arduino PINs to which the S0-S3 pins connect.
+ * 1st argument is the SIG pin (digital input on Arduino PIN 3).
+ * 2nd argument is the Arduino PINs to which channel control pins S0-S3 connect.
  */
-Type4067Mux mux(3, INPUT, DIGITAL, 8, 9, 10, 11);
+Mux mux(Pin(3, Input, Digital), { 8, 9, 10, 11 });
 
 void setup() {
   // Initializes serial port.
@@ -37,7 +37,7 @@ void setup() {
  */
 void loop() {
   byte data;
-  for (byte i = 0; i < 16; ++i) {
+  for (byte i = 0; i < mux.channelCount(); ++i) {
     // Reads from channel i and returns HIGH or LOW.
     data = mux.read(i);
 

@@ -8,148 +8,168 @@
  * License:
  *    This library is licensed under the MIT license
  *    http://www.opensource.org/licenses/mit-license.php
- *
- * Filename: Mux.h
- * Version: 2.0
- * Author: Stefano Chizzolini, Nick Lamprianidis
  */
 
 #ifndef Mux_h
 #define Mux_h
 
 #include <Arduino.h>
-#include "Defs.h"
+#include <vector>
+#include <initializer_list>
+#include "global.h"
 
+namespace admux {
+
+/**
+ * Analog/Digital multiplexer of arbitrary channel size.
+ */
 class Mux {
 public:
-  /*
+  /**
    * Creates a Mux instance.
    *
-   * Arguments:
-   *    selectionPins - MCU pins to which the mux selection pins connect.
-   *    selectionPinsLength - MCU pins array size.
-   *    enablePin - (Optional) MCU pin to which the mux enable pin connects.
+   * @param channelPins
+   *      MCU pins to which the mux control pins (S*) connect.
+   * @param enablePin
+   *      MCU pin to which the mux enable pin (EN) connects.
+   * @param writePin
+   *      MCU pin to which the mux write pin (WR) connects.
    */
-  Mux(int8_t selectionPins[], uint8_t selectionPinsLength, int8_t enablePin =
-  UNDEFINED);
+  Mux(std::initializer_list<int8_t> channelPins, int8_t enablePin = UNDEFINED,
+      int8_t writePin = UNDEFINED);
 
-  /*
+  /**
    * Creates a Mux instance.
    *
-   * Arguments:
-   *    signalPin - MCU pin to which the mux signal pin connects.
-   *    signalMode - {INPUT, OUTPUT, INPUT_PULLUP}
-   *    signalType - {DIGITAL, ANALOG}
-   *    selectionPins - MCU pins to which the mux selection pins connect.
-   *    selectionPinsLength - MCU pins array size.
-   *    enablePin - (Optional) MCU pin to which the mux enable pin connects.
+   * @param signalPin
+   *      MCU pin to which the mux signal pin (SG) connects.
+   * @param channelPins
+   *      MCU pins to which the mux control pins (Sx) connect.
+   * @param enablePin
+   *      MCU pin to which the mux enable pin (EN) connects.
+   * @param writePin
+   *      MCU pin to which the mux write pin (WR) connects.
    */
-  Mux(uint8_t signalPin, uint8_t signalMode, uint8_t signalType,
-      int8_t selectionPins[], uint8_t selectionPinsLength, int8_t enablePin =
-      UNDEFINED);
+  Mux(Pin signalPin, std::initializer_list<int8_t> channelPins,
+      int8_t enablePin = UNDEFINED, int8_t writePin = UNDEFINED);
 
-  /*
+  /**
+   * Current channel.
+   */
+  int8_t channel() {
+    return m_channel;
+  }
+
+  /**
+   * @return
+   *      <ul>
+   *        <li>ERROR_SUCCESS, if success</li>
+   *        <li>ERROR_OUT_OF_RANGE, if channel beyond the selectable range</li>
+   *      </ul>
+   */
+  int8_t channel(int8_t value);
+
+  /**
+   * Range of selectable channels.
+   */
+  uint8_t channelCount() {
+    return m_channelCount;
+  }
+
+  /**
    * Reads from the given channel.
    *
-   * Arguments:
-   *    channel - (Optional) Channel to read from. Default: current channel.
-   * Returns:
-   *    {HIGH, LOW} - if signal pin was set to DIGITAL.
-   *    ADC value - if signal pin was set to ANALOG.
-   *    {-1} - if signal pin wasn't set.
-   * Side effects: in case the channel argument is defined, it becomes the
-   *    current one (same as invoking setChannel method).
+   * <p>Side effects: in case the channel argument is defined, it becomes the
+   *    current one (same as invoking channel method).</p>
+   *
+   * @param channel
+   *      Channel to read from. Default: current channel.
+   * @return
+   *      <ul>
+   *        <li>{HIGH, LOW}, if signal pin was set to Digital</li>
+   *        <li>ADC value, if signal pin was set to Analog</li>
+   *      </ul>
    */
   int16_t read(int8_t channel = UNDEFINED);
 
-  /*
-   * Selects the given channel.
-   *
-   * Returns:
-   *    {0} - if operation succeeded.
-   *    {-1} - if operation failed.
+  /**
+   * Whether the mux signal is enabled.
    */
-  int8_t setChannel(uint8_t value);
+  bool enabled() {
+    return m_enabled;
+  }
 
-  /*
-   * Sets whether the mux signal is enabled.
-   *
-   * Returns:
-   *    {0} - if operation succeeded.
-   *    {-1} - if operation failed.
+  /**
+   * @return
+   *      <ul>
+   *        <li>ERROR_SUCCESS, if success</li>
+   *        <li>ERROR_UNDEFINED_PIN, if enablePin undefined</li>
+   *      </ul>
    */
-  virtual int8_t setEnabled(bool value) = 0;
+  int8_t enabled(bool value);
 
-  /*
-   * Configures the signal pin.
-   *
+  Pin signalPin() {
+    return m_signalPin;
+  }
+
+  /**
    * As the same mux can be physically connected to multiple (mutually-
    * exclusive) signal pins at once, this function takes care to electrically
    * exclude previously-assigned signal pins.
    *
-   * Arguments:
-   *    pin - MCU pin to which the mux signal pin connects.
-   *    mode - {INPUT, OUTPUT, INPUT_PULLUP}
-   *    type - {DIGITAL, ANALOG}
-   * Returns:
-   *    {0} - if operation succeeded.
-   *    {-1} - if operation failed.
+   * @return ERROR_SUCCESS, if success.
    */
-  int8_t setSignalPin(uint8_t pin, uint8_t mode, uint8_t type);
+  int8_t signalPin(Pin value);
 
-  /*
+  /**
+   * As the same mux can be physically connected to multiple (mutually-
+   * exclusive) signal pins at once, this function takes care to electrically
+   * exclude previously-assigned signal pins.
+   *
+   * @param pin
+   *      MCU pin to which the mux signal pin connects.
+   * @param mode
+   *      MCU signal mode.
+   * @param type
+   *      MCU signal type.
+   * @return ERROR_SUCCESS, if success.
+   */
+  int8_t signalPin(int8_t pin, PinMode mode, PinType type) {
+    return signalPin(Pin(pin, mode, type));
+  }
+
+  /**
    * Writes to the given channel.
    *
-   * Arguments:
-   *    data - Data to write to channel:
-   *      {HIGH, LOW} - if the signal pin was set to DIGITAL.
-   *      PWM value - if the signal pin was set to ANALOG.
-   *    channel - (Optional) Channel to write to. Default: current channel.
-   * Returns:
-   *    {0} - if operation succeeded.
-   *    {-1} - if wrong signal mode (MUST be OUTPUT).
-   * Side effects: in case the channel argument is defined, it becomes the
-   *    current one (same as invoking setChannel method).
+   * <p>Side effects: in case the channel argument is defined, it becomes the
+   *    current one (same as invoking channel method).</p>
+   *
+   * @param data
+   *      Data to write to channel:
+   *      <ul>
+   *        <li>{HIGH, LOW}, if signal pin was set to Digital</li>
+   *        <li>PWM value, if signal pin was set to Analog</li>
+   *      </ul>
+   * @param channel
+   *      Channel to write to (Default: current channel).
+   * @return
+   *      <ul>
+   *        <li>ERROR_SUCCESS, if success</li>
+   *        <li>ERROR_WRONG_SIGNAL_MODE, if signal mode isn't OUTPUT</li>
+   *      </ul>
    */
   int8_t write(uint8_t data, int8_t channel = UNDEFINED);
 
 protected:
-  /*
-   * Current mux channel.
-   */
-  int8_t channel = UNDEFINED;
-  /*
-   * Mux signal enabled status.
-   */
-  int8_t enabled = UNDEFINED;
-  /*
-   * MCU enable pin.
-   */
-  int8_t enablePin = UNDEFINED;
-  /*
-   * MCU selection pins.
-   */
-  /*
-   * NOTE: Fixed size, as dynamic allocation's overhead exceeds possible memory
-   * gains; the actual number of pins is defined by selectionPinsCount field.
-   */
-  uint8_t selectionPins[4];
-  /*
-   * MCU selection pins count.
-   */
-  uint8_t selectionPinsCount;
-  /*
-   * MCU signal mode ({INPUT, OUTPUT, INPUT_PULLUP}).
-   */
-  int8_t signalMode = UNDEFINED;
-  /*
-   * MCU signal pin.
-   */
-  int8_t signalPin = UNDEFINED;
-  /*
-   * MCU signal type ({DIGITAL, ANALOG}).
-   */
-  int8_t signalType = UNDEFINED;
+  int8_t m_channel = UNDEFINED;
+  uint8_t m_channelCount;
+  std::vector<int8_t> m_channelPins;
+  bool m_enabled = true;
+  int8_t m_enablePin = UNDEFINED;
+  Pin m_signalPin;
+  int8_t m_writePin = UNDEFINED;
 };
 
-#endif
+}
+
+#endif // Mux_h
