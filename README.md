@@ -1,5 +1,5 @@
 # arduino-ad-mux-lib
-Arduino library for controlling [analog/digital multiplexers](https://en.wikipedia.org/wiki/Multiplexer) (A/D mux) of arbitrary size, like CMOS 4000 series (e.g. 8-channel 4051 (CD4051, 74HC4051), 16-channel 4067 (CD4067, 74HC4067)), 32-channel MegaMUX (ADG732), and so on.
+Arduino library for controlling [analog/digital multiplexers](https://en.wikipedia.org/wiki/Multiplexer) (A/D mux) of any size, like CMOS 4000 series (e.g. 8-channel 4051 (CD4051, 74HC4051), 16-channel 4067 (CD4067, 74HC4067)), 32-channel MegaMUX (ADG732), and so on.
 
 This library was forked from project MUX74HC4067 (https://github.com/nlamprian/MUX74HC4067) in order to generalize and streamline its functionalities at both interface and implementation levels.
 
@@ -17,7 +17,7 @@ This library provides several examples that demonstrate its functionalities; the
 using namespace admux;
 
 // 16-channel Mux declared with analog input signal on pin A0 and channel control on digital pins 8, 9, 10 and 11.
-Mux mux(Pin(A0, Input, Analog), {8, 9, 10, 11});
+Mux mux(Pin(A0, Input, Analog), Pinset(8, 9, 10, 11));
 ```
 
 The signal pin can also be assigned (and possibly replaced) through the `signalPin(..)` method.

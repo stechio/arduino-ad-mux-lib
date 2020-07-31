@@ -44,8 +44,8 @@ typedef enum {
 } PinType;
 
 typedef struct Pin {
-  PinMode mode;
   int8_t pin;
+  PinMode mode;
   PinType type;
 
   Pin() : Pin(UNDEFINED, Output, Digital) {
@@ -74,8 +74,7 @@ typedef struct Pinset {
       int8_t pin4 = UNDEFINED,
       int8_t pin5 = UNDEFINED,
       int8_t pin6 = UNDEFINED,
-      int8_t pin7 = UNDEFINED,
-      int8_t pin8 = UNDEFINED
+      int8_t pin7 = UNDEFINED
       ){
     pins[0] = pin0;
     pins[1] = pin1;
@@ -85,7 +84,6 @@ typedef struct Pinset {
     pins[5] = pin5;
     pins[6] = pin6;
     pins[7] = pin7;
-    pins[8] = pin8;
     for(int i = 0; i < MAX_SIZE; i++) {
       if (!IS_DEFINED(pins[i])) {
         size = i;
