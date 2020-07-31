@@ -14,8 +14,6 @@
 #define Mux_h
 
 #include <Arduino.h>
-#include <vector>
-#include <initializer_list>
 #include "global.h"
 
 namespace admux {
@@ -35,8 +33,8 @@ public:
    * @param writePin
    *      MCU pin to which the mux write pin (WR) connects.
    */
-  Mux(std::initializer_list<int8_t> channelPins, int8_t enablePin = UNDEFINED,
-      int8_t writePin = UNDEFINED);
+  Mux(Pinset channelPins, int8_t enablePin = UNDEFINED, int8_t writePin =
+      UNDEFINED);
 
   /**
    * Creates a Mux instance.
@@ -50,8 +48,8 @@ public:
    * @param writePin
    *      MCU pin to which the mux write pin (WR) connects.
    */
-  Mux(Pin signalPin, std::initializer_list<int8_t> channelPins,
-      int8_t enablePin = UNDEFINED, int8_t writePin = UNDEFINED);
+  Mux(Pin signalPin, Pinset channelPins, int8_t enablePin = UNDEFINED,
+      int8_t writePin = UNDEFINED);
 
   /**
    * Current channel.
@@ -163,7 +161,7 @@ public:
 protected:
   int8_t m_channel = UNDEFINED;
   uint8_t m_channelCount;
-  std::vector<int8_t> m_channelPins;
+  Pinset m_channelPins;
   bool m_enabled = true;
   int8_t m_enablePin = UNDEFINED;
   Pin m_signalPin;

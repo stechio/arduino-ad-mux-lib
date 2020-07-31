@@ -14,27 +14,22 @@
 
 using namespace admux;
 
-Mux::Mux(std::initializer_list<int8_t> channelPins, int8_t enablePin,
-    int8_t writePin) {
-  for (auto channelPin : channelPins) {
-    if (!IS_DEFINED(channelPin))
-      break;
-
-    m_channelPins.push_back(channelPin);
-    pinMode(channelPin, Output);
+Mux::Mux(Pinset channelPins, int8_t enablePin, int8_t writePin) :
+    m_channelPins(channelPins), m_enablePin(enablePin), m_writePin(writePin) {
+  for (int i = 0; i < m_channelPins.size; i++) {
+    pinMode(m_channelPins[i], Output);
   }
-  m_channelCount = (1 << m_channelPins.size());
+  m_channelCount = 1 << m_channelPins.size;
 
   if (IS_DEFINED(enablePin)) {
-    pinMode(m_enablePin = enablePin, PinMode::Output);
+    pinMode(m_enablePin, Output);
   }
   if (IS_DEFINED(writePin)) {
-    pinMode(m_writePin = writePin, PinMode::Output);
+    pinMode(m_writePin, Output);
   }
 }
 
-Mux::Mux(Pin signalPin, std::initializer_list<int8_t> channelPins,
-    int8_t enablePin, int8_t writePin) :
+Mux::Mux(Pin signalPin, Pinset channelPins, int8_t enablePin, int8_t writePin) :
     Mux::Mux(channelPins, enablePin, writePin) {
   Mux::signalPin(signalPin);
 }
@@ -69,7 +64,7 @@ int8_t Mux::channel(int8_t value) {
     digitalWrite(m_writePin, LOW);
   }
   m_channel = value;
-  for (uint8_t i = 0; i < m_channelPins.size(); i++) {
+  for (uint8_t i = 0; i < m_channelPins.size; i++) {
     digitalWrite(m_channelPins[i], bitRead(value, i));
   }
   if (IS_DEFINED(m_writePin)) {

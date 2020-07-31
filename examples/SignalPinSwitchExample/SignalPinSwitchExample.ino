@@ -28,11 +28,10 @@ using namespace admux;
 /*
  * Creates an 8-channel Mux instance.
  *
- * 7, 8 and 9 are the Arduino PINs to which channel selection pins S0-S2 connect:
- * channels C0-C7 are used, any unused selection pin (S3, S4,...) should connect
- * to GND.
+ * 7, 8 and 9 are the Arduino pins connected to pins S0-S2 for controlling
+ * channels C0-C7; any unused control pin (S3, S4,...) should be routed to GND.
  */
-Mux mux({ 7, 8, 9 });
+Mux mux(Pinset(7, 8, 9));
 
 void setup() {
 }

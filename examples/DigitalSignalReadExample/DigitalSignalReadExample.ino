@@ -18,10 +18,10 @@ using namespace admux;
 /*
  * Creates a Mux instance.
  *
- * 1st argument is the SIG pin (digital input on Arduino PIN 3).
- * 2nd argument is the Arduino PINs to which channel control pins S0-S3 connect.
+ * 1st argument is the SIG (signal) pin (Arduino digital input pin 3).
+ * 2nd argument is the S0-S3 (channel control) pins (Arduino pins 8, 9, 10, 11).
  */
-Mux mux(Pin(3, Input, Digital), { 8, 9, 10, 11 });
+Mux mux(Pin(3, Input, Digital), Pinset(8, 9, 10, 11));
 
 void setup() {
   // Initializes serial port.

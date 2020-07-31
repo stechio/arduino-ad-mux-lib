@@ -21,7 +21,7 @@
  * Macro: whether value argument is defined (assuming natural integers as valid
  * domain).
  */
-#define IS_DEFINED(x) x > UNDEFINED
+#define IS_DEFINED(x) (x > UNDEFINED)
 
 // @formatter:off
 namespace admux {
@@ -56,6 +56,51 @@ typedef struct Pin {
   }
 } Pin;
 
-} // @formatter:on
+typedef struct Pinset {
+  static const int MAX_SIZE = 8;
+
+  int8_t pins[MAX_SIZE];
+  uint8_t size;
+
+  /*
+   * Horribly clumsy, I know, but, willing to support even legacy MCUs, more
+   * elegant solutions like std::initializer_list aren't available, alas.
+   */
+  Pinset(
+      uint8_t pin0,
+      int8_t pin1 = UNDEFINED,
+      int8_t pin2 = UNDEFINED,
+      int8_t pin3 = UNDEFINED,
+      int8_t pin4 = UNDEFINED,
+      int8_t pin5 = UNDEFINED,
+      int8_t pin6 = UNDEFINED,
+      int8_t pin7 = UNDEFINED,
+      int8_t pin8 = UNDEFINED
+      ){
+    pins[0] = pin0;
+    pins[1] = pin1;
+    pins[2] = pin2;
+    pins[3] = pin3;
+    pins[4] = pin4;
+    pins[5] = pin5;
+    pins[6] = pin6;
+    pins[7] = pin7;
+    pins[8] = pin8;
+    for(int i = 0; i < MAX_SIZE; i++) {
+      if (!IS_DEFINED(pins[i])) {
+        size = i;
+        return;
+      }
+    }
+    size = MAX_SIZE;
+  }
+
+  uint8_t operator[](int index) {
+    return pins[index];
+  }
+} Pinset;
+
+}
+// @formatter:on
 
 #endif // arduino_ad_mux_lib_global_h
