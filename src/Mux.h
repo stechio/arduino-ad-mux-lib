@@ -10,8 +10,8 @@
  *    http://www.opensource.org/licenses/mit-license.php
  */
 
-#ifndef Mux_h
-#define Mux_h
+#ifndef ADMUX_MUX_H
+#define ADMUX_MUX_H
 
 #include <Arduino.h>
 #include "global.h"
@@ -19,7 +19,8 @@
 namespace admux {
 
 /**
- * Analog/Digital multiplexer of arbitrary channel size.
+ * <a href="https://en.wikipedia.org/wiki/Multiplexer">Analog/Digital multiplexer</a>
+ * of arbitrary channel size.
  */
 class Mux {
 public:
@@ -40,9 +41,9 @@ public:
    * Creates a Mux instance.
    *
    * @param signalPin
-   *      MCU pin to which the mux signal pin (SG) connects.
+   *      MCU pin to which the mux signal pin (SIG) connects.
    * @param channelPins
-   *      MCU pins to which the mux control pins (Sx) connect.
+   *      MCU pins to which the mux control pins (S*) connect.
    * @param enablePin
    *      MCU pin to which the mux enable pin (EN) connects.
    * @param writePin
@@ -59,6 +60,8 @@ public:
   }
 
   /**
+   * Sets {@link #channel()}.
+   *
    * @return
    *      <ul>
    *        <li>ERROR_SUCCESS, if success</li>
@@ -75,6 +78,24 @@ public:
   }
 
   /**
+   * Whether the mux signal is enabled.
+   */
+  bool enabled() {
+    return m_enabled;
+  }
+
+  /**
+   * Sets {@link #enabled()}.
+   *
+   * @return
+   *      <ul>
+   *        <li>ERROR_SUCCESS, if success</li>
+   *        <li>ERROR_UNDEFINED_PIN, if enablePin undefined</li>
+   *      </ul>
+   */
+  int8_t enabled(bool value);
+
+  /**
    * Reads from the given channel.
    *
    * <p>Side effects: in case the channel argument is defined, it becomes the
@@ -89,22 +110,6 @@ public:
    *      </ul>
    */
   int16_t read(int8_t channel = UNDEFINED);
-
-  /**
-   * Whether the mux signal is enabled.
-   */
-  bool enabled() {
-    return m_enabled;
-  }
-
-  /**
-   * @return
-   *      <ul>
-   *        <li>ERROR_SUCCESS, if success</li>
-   *        <li>ERROR_UNDEFINED_PIN, if enablePin undefined</li>
-   *      </ul>
-   */
-  int8_t enabled(bool value);
 
   Pin signalPin() {
     return m_signalPin;
@@ -170,4 +175,4 @@ protected:
 
 }
 
-#endif // Mux_h
+#endif // ADMUX_MUX_H

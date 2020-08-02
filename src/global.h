@@ -9,21 +9,9 @@
  *    http://www.opensource.org/licenses/mit-license.php
  */
 
-#ifndef arduino_ad_mux_lib_global_h
-#define arduino_ad_mux_lib_global_h
+#ifndef ADMUX_GLOBAL_H
+#define ADMUX_GLOBAL_H
 
-/*
- * Undefined value.
- */
-#define UNDEFINED -1
-
-/*
- * Macro: whether value argument is defined (assuming natural integers as valid
- * domain).
- */
-#define IS_DEFINED(x) (x > UNDEFINED)
-
-// @formatter:off
 namespace admux {
 
 const int ERROR_SUCCESS = 0;
@@ -31,6 +19,12 @@ const int ERROR_WRONG_SIGNAL_MODE = -1;
 const int ERROR_UNHANDLED_OPERATION = -2;
 const int ERROR_OUT_OF_RANGE = -3;
 const int ERROR_UNDEFINED_PIN = -4;
+
+const int8_t UNDEFINED = -1;
+
+inline bool isDefined(int8_t value) {
+  return value > UNDEFINED;
+}
 
 typedef enum {
   Input = INPUT,
@@ -48,20 +42,17 @@ typedef struct Pin {
   PinMode mode;
   PinType type;
 
-  Pin() : Pin(UNDEFINED, Output, Digital) {
+  Pin() :
+      Pin(UNDEFINED, Output, Digital) {
   }
 
-  Pin(int8_t pin, PinMode mode, PinType type)
-      : pin(pin), mode(mode), type(type) {
+  Pin(int8_t pin, PinMode mode, PinType type) :
+      pin(pin), mode(mode), type(type) {
   }
 } Pin;
 
 typedef struct Pinset {
-  static const int MAX_SIZE = 8;
-
-  int8_t pins[MAX_SIZE];
-  uint8_t size;
-
+// @formatter:off
   /*
    * Horribly clumsy, I know, but, willing to support even legacy MCUs, more
    * elegant solutions like std::initializer_list aren't available, alas.
@@ -85,20 +76,30 @@ typedef struct Pinset {
     pins[6] = pin6;
     pins[7] = pin7;
     for(int i = 0; i < MAX_SIZE; i++) {
-      if (!IS_DEFINED(pins[i])) {
-        size = i;
+      if (!isDefined(pins[i])) {
+        m_size = i;
         return;
       }
     }
-    size = MAX_SIZE;
+    m_size = MAX_SIZE;
   }
+// @formatter:on
 
   uint8_t operator[](int index) {
     return pins[index];
   }
+
+  uint8_t size() {
+    return m_size;
+  }
+
+private:
+  static const int MAX_SIZE = 8;
+
+  int8_t pins[MAX_SIZE];
+  uint8_t m_size;
 } Pinset;
 
 }
-// @formatter:on
 
-#endif // arduino_ad_mux_lib_global_h
+#endif // ADMUX_GLOBAL_H
