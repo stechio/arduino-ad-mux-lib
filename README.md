@@ -1,4 +1,6 @@
 # arduino-ad-mux-lib
+[![Build Status](https://travis-ci.com/stechio/arduino-ad-mux-lib.svg?branch=feat%2Fdev3)](https://travis-ci.com/stechio/arduino-ad-mux-lib)
+
 Arduino library for controlling [analog/digital multiplexers](https://en.wikipedia.org/wiki/Multiplexer) (A/D mux) of any size, like CMOS 4000 series (e.g. 8-channel 4051 (CD4051, 74HC4051), 16-channel 4067 (CD4067, 74HC4067)), 32-channel MegaMUX (ADG732), and so on.
 
 This library was forked from project MUX74HC4067 (https://github.com/nlamprian/MUX74HC4067) in order to generalize and streamline its functionalities at both interface and implementation levels.

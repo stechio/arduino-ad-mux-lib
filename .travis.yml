@@ -13,11 +13,11 @@ install:
 # https://docs.platformio.org/en/latest/boards/index.html
 env:
   - BOARD=uno
-  - BOARD=leonardo
   - BOARD=ATmega32
   - BOARD=megaatmega2560
   - BOARD=nodemcuv2
   - BOARD=esp-wrover-kit
+  - BOARD=teensy40
 
 # https://docs.platformio.org/en/latest/core/userguide/cmd_ci.html
 script:
