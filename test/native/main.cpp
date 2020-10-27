@@ -26,7 +26,7 @@ void test_Mux_channel(void) {
 
   Pinset channelPins(8, 9, 10);
   int8_t enabledPin = 20;
-  Mux mux(Pin(A0, Input, Analog), channelPins, enabledPin);
+  Mux mux(Pin(A0, INPUT, PinType::ANALOG), channelPins, enabledPin);
 
   TEST_ASSERT_EQUAL(1 << channelPins.size(), mux.channelCount());
   TEST_ASSERT_EQUAL(UNDEFINED, mux.channel());
@@ -49,12 +49,12 @@ void test_Mux_constructor(void) {
   When(Method(ArduinoFake(), pinMode)).AlwaysReturn();
   When(Method(ArduinoFake(), digitalWrite)).AlwaysReturn();
 
-  Mux mux(Pin(A0, Input, Analog), Pinset(8, 9, 10, 11));
+  Mux mux(Pin(A0, INPUT, PinType::ANALOG), Pinset(8, 9, 10, 11));
 
   Pin signalPin = mux.signalPin();
   TEST_ASSERT_EQUAL(A0, signalPin.pin);
-  TEST_ASSERT_EQUAL(Input, signalPin.mode);
-  TEST_ASSERT_EQUAL(Analog, signalPin.type);
+  TEST_ASSERT_EQUAL(INPUT, signalPin.mode);
+  TEST_ASSERT_EQUAL(PinType::ANALOG, signalPin.type);
 
   Verify(Method(ArduinoFake(), pinMode).Using(8, OUTPUT)).Once();
   Verify(Method(ArduinoFake(), pinMode).Using(9, OUTPUT)).Once();
@@ -69,13 +69,13 @@ void test_Mux_enabled(void) {
   When(Method(ArduinoFake(), digitalWrite)).AlwaysReturn();
 
   // enable-pin undefined.
-  Mux mux(Pin(A0, Input, Analog), Pinset(8, 9, 10, 11));
+  Mux mux(Pin(A0, INPUT, PinType::ANALOG), Pinset(8, 9, 10, 11));
   TEST_ASSERT_EQUAL(ERROR_UNDEFINED_PIN, mux.enabled(true));
 
   // enable-pin defined:
   int8_t enablePin = 12;
   // - set to true
-  mux = Mux(Pin(A0, Input, Analog), Pinset(8, 9, 10, 11), enablePin);
+  mux = Mux(Pin(A0, INPUT, PinType::ANALOG), Pinset(8, 9, 10, 11), enablePin);
   TEST_ASSERT_EQUAL(ERROR_SUCCESS, mux.enabled(true));
   Verify(Method(ArduinoFake(), digitalWrite).Using(enablePin, LOW)).Once();
   Verify(Method(ArduinoFake(), digitalWrite).Using(enablePin, HIGH)).Never();
@@ -93,7 +93,7 @@ void test_Mux_read(void) {
   When(Method(ArduinoFake(), digitalRead)).AlwaysReturn();
 
   // Analog input.
-  Pin signalPin(A0, Input, Analog);
+  Pin signalPin(A0, INPUT, PinType::ANALOG);
   Pinset channelPins(8, 9, 10);
   int8_t enabledPin = 20;
   Mux mux(signalPin, channelPins, enabledPin);
@@ -105,7 +105,7 @@ void test_Mux_read(void) {
   Unverified.Verify(Method(ArduinoFake(), digitalRead).Using(signalPin.pin)).Never();
 
   // Digital input.
-  mux = Mux(signalPin = Pin(3, Input, Digital), channelPins, enabledPin);
+  mux = Mux(signalPin = Pin(3, INPUT, PinType::DIGITAL), channelPins, enabledPin);
 
   TEST_ASSERT_EQUAL(ERROR_SUCCESS, mux.read(mux.channelCount() - 1));
   Unverified.Verify(Method(ArduinoFake(), analogRead).Using(signalPin.pin)).Never();
@@ -120,7 +120,7 @@ void test_Mux_write(void) {
   uint8_t data = 128;
 
   // Analog input.
-  Pin signalPin(A0, Input, Analog);
+  Pin signalPin(A0, INPUT, PinType::ANALOG);
   Pinset channelPins(8, 9, 10);
   int8_t enabledPin = 20;
   Mux mux(signalPin, channelPins, enabledPin);
@@ -128,7 +128,7 @@ void test_Mux_write(void) {
   TEST_ASSERT_EQUAL(ERROR_WRONG_SIGNAL_MODE, mux.write(data, mux.channelCount()));
 
   // Analog output.
-  mux = Mux(signalPin = Pin(3, Output, Analog), channelPins, enabledPin);
+  mux = Mux(signalPin = Pin(3, OUTPUT, PinType::ANALOG), channelPins, enabledPin);
 
   TEST_ASSERT_EQUAL(ERROR_OUT_OF_RANGE, mux.write(data, mux.channelCount()));
 
@@ -137,7 +137,7 @@ void test_Mux_write(void) {
   Unverified.Verify(Method(ArduinoFake(), digitalWrite).Using(signalPin.pin, data)).Never();
 
   // Digital output.
-  mux = Mux(signalPin = Pin(3, Output, Digital), channelPins, enabledPin);
+  mux = Mux(signalPin = Pin(3, OUTPUT, PinType::DIGITAL), channelPins, enabledPin);
 
   TEST_ASSERT_EQUAL(ERROR_SUCCESS, mux.write(data, mux.channelCount() - 1));
   Unverified.Verify(Method(ArduinoFake(), analogWrite).Using(signalPin.pin, data)).Never();
@@ -145,11 +145,11 @@ void test_Mux_write(void) {
 }
 
 void test_Pin(void) {
-  Pin pin(A0, Input, Analog);
+  Pin pin(A0, INPUT, PinType::ANALOG);
 
   TEST_ASSERT_EQUAL(A0, pin.pin);
-  TEST_ASSERT_EQUAL(Input, pin.mode);
-  TEST_ASSERT_EQUAL(Analog, pin.type);
+  TEST_ASSERT_EQUAL(INPUT, pin.mode);
+  TEST_ASSERT_EQUAL(PinType::ANALOG, pin.type);
 }
 
 void test_Pinset(void) {

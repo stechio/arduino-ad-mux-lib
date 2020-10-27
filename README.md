@@ -19,7 +19,7 @@ This library provides several examples that demonstrate its functionalities; the
 using namespace admux;
 
 // 16-channel Mux declared with analog input signal on pin A0 and channel control on digital pins 8, 9, 10 and 11.
-Mux mux(Pin(A0, Input, Analog), Pinset(8, 9, 10, 11));
+Mux mux(Pin(A0, INPUT, PinType::ANALOG), Pinset(8, 9, 10, 11));
 ```
 
 The signal pin can also be assigned (and possibly replaced) through the `signalPin(..)` method.

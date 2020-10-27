@@ -17,12 +17,12 @@ using namespace admux;
 Mux::Mux(Pinset channelPins, int8_t enablePin) :
     m_channelPins(channelPins), m_enablePin(enablePin) {
   for (int i = 0; i < m_channelPins.size(); i++) {
-    pinMode(m_channelPins[i], Output);
+    pinMode(m_channelPins[i], OUTPUT);
   }
   m_channelCount = 1 << m_channelPins.size();
 
   if (isDefined(enablePin)) {
-    pinMode(m_enablePin, Output);
+    pinMode(m_enablePin, OUTPUT);
   }
 }
 
@@ -60,9 +60,9 @@ int16_t Mux::read(int8_t channel) {
   }
 
   switch (m_signalPin.type) {
-    case Analog:
+    case PinType::ANALOG:
       return analogRead(m_signalPin.pin);
-    case Digital:
+    case PinType::DIGITAL:
       return digitalRead(m_signalPin.pin);
     default:
       return ERROR_UNHANDLED_OPERATION;
@@ -78,14 +78,14 @@ int8_t Mux::signalPin(Pin value) {
    */
   if (isDefined(m_signalPin.pin) && m_signalPin.pin != value.pin) {
     // Put the old signal pin in high impedance state!
-    if (m_signalPin.mode == Output) {
+    if (m_signalPin.mode == OUTPUT) {
       digitalWrite(m_signalPin.pin, LOW);
     }
-    pinMode(m_signalPin.pin, Input);
+    pinMode(m_signalPin.pin, INPUT);
   }
 
   m_signalPin = value;
-  if (m_signalPin.mode == Input) {
+  if (m_signalPin.mode == INPUT) {
     // Disable pullup!
     /* SEE: https://www.arduino.cc/en/Tutorial/DigitalPins */
     digitalWrite(m_signalPin.pin, LOW);
@@ -95,7 +95,7 @@ int8_t Mux::signalPin(Pin value) {
 }
 
 int8_t Mux::write(uint8_t data, int8_t channel) {
-  if (m_signalPin.mode != Output)
+  if (m_signalPin.mode != OUTPUT)
     return ERROR_WRONG_SIGNAL_MODE;
 
   if (isDefined(channel)) {
@@ -105,14 +105,14 @@ int8_t Mux::write(uint8_t data, int8_t channel) {
   }
 
   switch (m_signalPin.type) {
-    case Analog:
+    case PinType::ANALOG:
 #if defined(ARDUINO_ARCH_ESP32)
       ledcWrite(m_signalPin.pin, data);
 #else
       analogWrite(m_signalPin.pin, data);
 #endif
       break;
-    case Digital:
+    case PinType::DIGITAL:
       digitalWrite(m_signalPin.pin, data);
       break;
   }

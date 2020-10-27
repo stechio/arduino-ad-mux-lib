@@ -26,27 +26,21 @@ inline bool isDefined(int8_t value) {
   return value > UNDEFINED;
 }
 
-typedef enum {
-  Input = INPUT,
-  InputPullup = INPUT_PULLUP,
-  Output = OUTPUT
-} PinMode;
-
-typedef enum {
-  Analog,
-  Digital
-} PinType;
+enum class PinType {
+  ANALOG,
+  DIGITAL
+};
 
 typedef struct Pin {
   int8_t pin;
-  PinMode mode;
+  uint8_t mode;
   PinType type;
 
   Pin() :
-      Pin(UNDEFINED, Output, Digital) {
+      Pin(UNDEFINED, OUTPUT, PinType::DIGITAL) {
   }
 
-  Pin(int8_t pin, PinMode mode, PinType type) :
+  Pin(int8_t pin, uint8_t mode, PinType type) :
       pin(pin), mode(mode), type(type) {
   }
 } Pin;

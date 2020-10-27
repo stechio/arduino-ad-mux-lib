@@ -16,7 +16,7 @@
 #ifdef UNIT_TEST
   #include "ArduinoFake.h"
 #else
-#include "Arduino.h"
+  #include "Arduino.h"
 #endif
 #include "global.h"
 
@@ -136,7 +136,7 @@ public:
    *      MCU signal type.
    * @return ERROR_SUCCESS, if success.
    */
-  int8_t signalPin(int8_t pin, PinMode mode, PinType type) {
+  int8_t signalPin(int8_t pin, uint8_t mode, PinType type) {
     return signalPin(Pin(pin, mode, type));
   }
 
