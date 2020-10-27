@@ -26,8 +26,7 @@ void test_Mux_channel(void) {
 
   Pinset channelPins(8, 9, 10);
   int8_t enabledPin = 20;
-  int8_t writePin = 21;
-  Mux mux(Pin(A0, Input, Analog), channelPins, enabledPin, writePin);
+  Mux mux(Pin(A0, Input, Analog), channelPins, enabledPin);
 
   TEST_ASSERT_EQUAL(1 << channelPins.size(), mux.channelCount());
   TEST_ASSERT_EQUAL(UNDEFINED, mux.channel());
@@ -41,8 +40,6 @@ void test_Mux_channel(void) {
           Method(ArduinoFake(), digitalWrite).Using(channelPins[p],
               bitRead(i, p))).Once();
     }
-    Unverified.Verify(Method(ArduinoFake(), digitalWrite).Using(writePin, LOW)).Once();
-    Unverified.Verify(Method(ArduinoFake(), digitalWrite).Using(writePin, HIGH)).Once();
   }
   // out-of-range channel selection.
   TEST_ASSERT_EQUAL(ERROR_OUT_OF_RANGE, mux.channel(mux.channelCount()));
@@ -99,8 +96,7 @@ void test_Mux_read(void) {
   Pin signalPin(A0, Input, Analog);
   Pinset channelPins(8, 9, 10);
   int8_t enabledPin = 20;
-  int8_t writePin = 21;
-  Mux mux(signalPin, channelPins, enabledPin, writePin);
+  Mux mux(signalPin, channelPins, enabledPin);
 
   TEST_ASSERT_EQUAL(ERROR_OUT_OF_RANGE, mux.read(mux.channelCount()));
 
@@ -109,7 +105,7 @@ void test_Mux_read(void) {
   Unverified.Verify(Method(ArduinoFake(), digitalRead).Using(signalPin.pin)).Never();
 
   // Digital input.
-  mux = Mux(signalPin = Pin(3, Input, Digital), channelPins, enabledPin, writePin);
+  mux = Mux(signalPin = Pin(3, Input, Digital), channelPins, enabledPin);
 
   TEST_ASSERT_EQUAL(ERROR_SUCCESS, mux.read(mux.channelCount() - 1));
   Unverified.Verify(Method(ArduinoFake(), analogRead).Using(signalPin.pin)).Never();
@@ -127,13 +123,12 @@ void test_Mux_write(void) {
   Pin signalPin(A0, Input, Analog);
   Pinset channelPins(8, 9, 10);
   int8_t enabledPin = 20;
-  int8_t writePin = 21;
-  Mux mux(signalPin, channelPins, enabledPin, writePin);
+  Mux mux(signalPin, channelPins, enabledPin);
 
   TEST_ASSERT_EQUAL(ERROR_WRONG_SIGNAL_MODE, mux.write(data, mux.channelCount()));
 
   // Analog output.
-  mux = Mux(signalPin = Pin(3, Output, Analog), channelPins, enabledPin, writePin);
+  mux = Mux(signalPin = Pin(3, Output, Analog), channelPins, enabledPin);
 
   TEST_ASSERT_EQUAL(ERROR_OUT_OF_RANGE, mux.write(data, mux.channelCount()));
 
@@ -142,7 +137,7 @@ void test_Mux_write(void) {
   Unverified.Verify(Method(ArduinoFake(), digitalWrite).Using(signalPin.pin, data)).Never();
 
   // Digital output.
-  mux = Mux(signalPin = Pin(3, Output, Digital), channelPins, enabledPin, writePin);
+  mux = Mux(signalPin = Pin(3, Output, Digital), channelPins, enabledPin);
 
   TEST_ASSERT_EQUAL(ERROR_SUCCESS, mux.write(data, mux.channelCount() - 1));
   Unverified.Verify(Method(ArduinoFake(), analogWrite).Using(signalPin.pin, data)).Never();

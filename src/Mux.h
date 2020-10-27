@@ -16,7 +16,7 @@
 #ifdef UNIT_TEST
   #include "ArduinoFake.h"
 #else
-  #include "Arduino.h"
+#include "Arduino.h"
 #endif
 #include "global.h"
 
@@ -35,11 +35,8 @@ public:
    *      MCU pins to which the mux control pins (S*) connect.
    * @param enablePin
    *      MCU pin to which the mux enable pin (EN) connects.
-   * @param writePin
-   *      MCU pin to which the mux write pin (WR) connects.
    */
-  Mux(Pinset channelPins, int8_t enablePin = UNDEFINED, int8_t writePin =
-      UNDEFINED);
+  Mux(Pinset channelPins, int8_t enablePin = UNDEFINED);
 
   /**
    * Creates a Mux instance.
@@ -50,11 +47,8 @@ public:
    *      MCU pins to which the mux control pins (S*) connect.
    * @param enablePin
    *      MCU pin to which the mux enable pin (EN) connects.
-   * @param writePin
-   *      MCU pin to which the mux write pin (WR) connects.
    */
-  Mux(Pin signalPin, Pinset channelPins, int8_t enablePin = UNDEFINED,
-      int8_t writePin = UNDEFINED);
+  Mux(Pin signalPin, Pinset channelPins, int8_t enablePin = UNDEFINED);
 
   /**
    * Current channel.
@@ -176,7 +170,6 @@ protected:
   bool m_enabled = true;
   int8_t m_enablePin = UNDEFINED;
   Pin m_signalPin;
-  int8_t m_writePin = UNDEFINED;
 };
 
 }

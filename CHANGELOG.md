@@ -17,7 +17,6 @@ This development iteration focuses on further API simplification (all ICs conver
 - enumerations (`PinMode`, `PinType`): created to replace macro constants (type-unsafe and prone to name clashing!)
 - `Pin` struct: created to encapsulate full pin definitions (as for signal pin)
 - `Pinset` struct: created to gather sets of coordinated pins (as for channel controls).
-- `Mux.m_writePin` (see ADG726/ADG732)
 - Travis CI configuration (@thijstriemstra)
 
 ### Changed

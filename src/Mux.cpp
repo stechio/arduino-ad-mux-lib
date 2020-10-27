@@ -14,8 +14,8 @@
 
 using namespace admux;
 
-Mux::Mux(Pinset channelPins, int8_t enablePin, int8_t writePin) :
-    m_channelPins(channelPins), m_enablePin(enablePin), m_writePin(writePin) {
+Mux::Mux(Pinset channelPins, int8_t enablePin) :
+    m_channelPins(channelPins), m_enablePin(enablePin) {
   for (int i = 0; i < m_channelPins.size(); i++) {
     pinMode(m_channelPins[i], Output);
   }
@@ -24,13 +24,10 @@ Mux::Mux(Pinset channelPins, int8_t enablePin, int8_t writePin) :
   if (isDefined(enablePin)) {
     pinMode(m_enablePin, Output);
   }
-  if (isDefined(writePin)) {
-    pinMode(m_writePin, Output);
-  }
 }
 
-Mux::Mux(Pin signalPin, Pinset channelPins, int8_t enablePin, int8_t writePin) :
-    Mux::Mux(channelPins, enablePin, writePin) {
+Mux::Mux(Pin signalPin, Pinset channelPins, int8_t enablePin) :
+    Mux::Mux(channelPins, enablePin) {
   Mux::signalPin(signalPin);
 }
 
@@ -40,20 +37,9 @@ int8_t Mux::channel(int8_t value) {
   else if (value >= m_channelCount)
     return ERROR_OUT_OF_RANGE;
 
-  /*
-   * NOTE: When WR is low, the channel control pins control which state the
-   * switches are in. On the rising edge of WR, the channel control data is
-   * latched (see ADG726/ADG732).
-   */
-  if (isDefined(m_writePin)) {
-    digitalWrite(m_writePin, LOW);
-  }
   m_channel = value;
   for (uint8_t i = 0; i < m_channelPins.size(); i++) {
     digitalWrite(m_channelPins[i], bitRead(value, i));
-  }
-  if (isDefined(m_writePin)) {
-    digitalWrite(m_writePin, HIGH);
   }
   return ERROR_SUCCESS;
 }
