@@ -14,5 +14,5 @@ install:
 script:
   - set -eo pipefail;
     for example in examples/*; do
-      platformio ci --project-conf --lib=. $example/*.ino;
+      platformio ci --project-conf=platformio.ini --lib=. $example/*.ino;
     done
