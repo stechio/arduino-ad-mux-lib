@@ -46,26 +46,26 @@ void loop() {
   int data[4];
 
   // Reads the 2 push buttons at channels C0 and C1.
-  mux.signalPin(3, INPUT, PinType::DIGITAL);
+  mux.signalPin(3, INPUT, PinType::Digital);
   for (byte i = 0; i < 2; ++i) {
     data[i] = mux.read(i);
   }
 
   // Reads the 2 potentiometers at channels C2 and C3.
-  mux.signalPin(A0, INPUT, PinType::ANALOG);
+  mux.signalPin(A0, INPUT, PinType::Analog);
   for (byte i = 2; i < 4; ++i) {
     data[i] = mux.read(i);
   }
 
   // Writes to the 2 LEDs at channels C4 and C5 HIGH or LOW according to the state of the push buttons.
-  mux.signalPin(3, OUTPUT, PinType::DIGITAL);
+  mux.signalPin(3, OUTPUT, PinType::Digital);
   for (byte i = 0; i < 2; ++i) {
     mux.write(!data[i], i + 4);
     delay(300);
   }
 
   // Outputs a PWM signal to the 2 LEDs at channels C6 and C7 according to the position of the potentiometers.
-  mux.signalPin(3, OUTPUT, PinType::ANALOG);
+  mux.signalPin(3, OUTPUT, PinType::Analog);
   for (byte i = 2; i < 4; ++i) {
     mux.write(data[i], i + 4);
     delay(300);

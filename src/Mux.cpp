@@ -60,9 +60,9 @@ int16_t Mux::read(int8_t channel) {
   }
 
   switch (m_signalPin.type) {
-    case PinType::ANALOG:
+    case PinType::Analog:
       return analogRead(m_signalPin.pin);
-    case PinType::DIGITAL:
+    case PinType::Digital:
       return digitalRead(m_signalPin.pin);
     default:
       return ERROR_UNHANDLED_OPERATION;
@@ -105,14 +105,14 @@ int8_t Mux::write(uint8_t data, int8_t channel) {
   }
 
   switch (m_signalPin.type) {
-    case PinType::ANALOG:
+    case PinType::Analog:
 #if defined(ARDUINO_ARCH_ESP32)
       ledcWrite(m_signalPin.pin, data);
 #else
       analogWrite(m_signalPin.pin, data);
 #endif
       break;
-    case PinType::DIGITAL:
+    case PinType::Digital:
       digitalWrite(m_signalPin.pin, data);
       break;
   }

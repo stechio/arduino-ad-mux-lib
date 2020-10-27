@@ -21,7 +21,7 @@ using namespace admux;
  * 1st argument is the SIG (signal) pin (Arduino digital output pin 3).
  * 2nd argument is the S0-S3 (channel control) pins (Arduino pins 8, 9, 10, 11).
  */
-Mux mux(Pin(3, OUTPUT, PinType::DIGITAL), Pinset(8, 9, 10, 11));
+Mux mux(Pin(3, OUTPUT, PinType::Digital), Pinset(8, 9, 10, 11));
 
 void setup() {
 }
