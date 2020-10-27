@@ -10,18 +10,9 @@ install:
   - pip install -U platformio
   - platformio update
 
-# https://docs.platformio.org/en/latest/boards/index.html
-env:
-  - BOARD=uno
-  - BOARD=ATmega32
-  - BOARD=megaatmega2560
-  - BOARD=nodemcuv2
-  - BOARD=esp-wrover-kit
-  - BOARD=teensy40
-
 # https://docs.platformio.org/en/latest/core/userguide/cmd_ci.html
 script:
   - set -eo pipefail;
     for example in examples/*; do
-      platformio ci --board=$BOARD --lib=. $example/*.ino;
+      platformio ci --project-conf --lib=. $example/*.ino;
     done

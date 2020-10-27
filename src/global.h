@@ -54,8 +54,9 @@ typedef struct Pin {
 typedef struct Pinset {
 // @formatter:off
   /*
-   * Horribly clumsy, I know, but, willing to support even legacy MCUs, more
-   * elegant solutions like std::initializer_list aren't available, alas.
+   * Horribly clumsy constructor, I know, but, willing to support even legacy
+   * MCUs, more elegant solutions like std::initializer_list aren't available,
+   * alas.
    */
   Pinset(
       uint8_t pin0,
@@ -85,7 +86,7 @@ typedef struct Pinset {
   }
 // @formatter:on
 
-  uint8_t operator[](int index) {
+  int8_t operator[](uint8_t index) {
     return pins[index];
   }
 
@@ -94,7 +95,7 @@ typedef struct Pinset {
   }
 
 private:
-  static const int MAX_SIZE = 8;
+  static const uint8_t MAX_SIZE = 8;
 
   int8_t pins[MAX_SIZE];
   uint8_t m_size;

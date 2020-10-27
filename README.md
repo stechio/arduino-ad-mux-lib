@@ -49,6 +49,16 @@ int16_t data = mux.read(2);
 
 Conversely, *the same signal pin can be physically connected to multiple ICs through a common data line*, as `enabled(..)` method controls whether the mux I/O operates.
 
+## Testing
+
+Project multi-platform building and testing are based on [PlatformIO](https://platformio.org/).
+
+Run unit tests through this command:
+
+```
+pio test -e test
+```
+
 ## Repository
 
 [https://github.com/stechio/arduino-ad-mux-lib](https://github.com/stechio/arduino-ad-mux-lib)

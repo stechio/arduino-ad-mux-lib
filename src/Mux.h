@@ -13,7 +13,11 @@
 #ifndef ADMUX_MUX_H
 #define ADMUX_MUX_H
 
-#include <Arduino.h>
+#ifdef UNIT_TEST
+  #include "ArduinoFake.h"
+#else
+  #include "Arduino.h"
+#endif
 #include "global.h"
 
 namespace admux {
@@ -107,6 +111,7 @@ public:
    *      <ul>
    *        <li>{HIGH, LOW}, if signal pin was set to Digital</li>
    *        <li>ADC value, if signal pin was set to Analog</li>
+   *        <li>see {@link #channel(int8_t)}</li>
    *      </ul>
    */
   int16_t read(int8_t channel = UNDEFINED);
@@ -159,6 +164,7 @@ public:
    *      <ul>
    *        <li>ERROR_SUCCESS, if success</li>
    *        <li>ERROR_WRONG_SIGNAL_MODE, if signal mode isn't OUTPUT</li>
+   *        <li>see {@link #channel(int8_t)}</li>
    *      </ul>
    */
   int8_t write(uint8_t data, int8_t channel = UNDEFINED);

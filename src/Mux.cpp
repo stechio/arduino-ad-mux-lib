@@ -37,7 +37,7 @@ Mux::Mux(Pin signalPin, Pinset channelPins, int8_t enablePin, int8_t writePin) :
 int8_t Mux::channel(int8_t value) {
   if (value == m_channel)
     return ERROR_SUCCESS;
-  else if (value > m_channelCount)
+  else if (value >= m_channelCount)
     return ERROR_OUT_OF_RANGE;
 
   /*
@@ -68,7 +68,9 @@ int8_t Mux::enabled(bool value) {
 
 int16_t Mux::read(int8_t channel) {
   if (isDefined(channel)) {
-    this->channel(channel);
+    int8_t result = this->channel(channel);
+    if (result != ERROR_SUCCESS)
+      return result;
   }
 
   switch (m_signalPin.type) {
@@ -111,7 +113,9 @@ int8_t Mux::write(uint8_t data, int8_t channel) {
     return ERROR_WRONG_SIGNAL_MODE;
 
   if (isDefined(channel)) {
-    this->channel(channel);
+    int8_t result = this->channel(channel);
+    if (result != ERROR_SUCCESS)
+      return result;
   }
 
   switch (m_signalPin.type) {
