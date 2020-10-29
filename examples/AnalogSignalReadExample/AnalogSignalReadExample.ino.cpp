@@ -11,6 +11,7 @@
  * Author: Nick Lamprianidis (adaptation by Stefano Chizzolini)
  */
 
+#include <Arduino.h>
 #include "Mux.h"
 
 using namespace admux;
@@ -24,11 +25,8 @@ using namespace admux;
 Mux mux(Pin(A0, INPUT, PinType::Analog), Pinset(8, 9, 10, 11));
 
 void setup() {
-  // Initializes serial port.
-  Serial.begin(9600);
-  // Waits for serial port to connect (needed for Leonardo only).
-  while (!Serial)
-    ;
+  // Serial port initialization.
+  Serial.begin(9600); while (!Serial) /* Waits for serial port to connect (needed for Leonardo only) */;
 }
 
 /*
@@ -37,15 +35,10 @@ void setup() {
  */
 void loop() {
   int data;
-  for (byte i = 0; i < mux.channelCount(); ++i) {
-    // Reads from channel i (returns a value from 0 to 1023).
-    data = mux.read(i);
+  for (byte i = 0; i < mux.channelCount(); i++) {
+    data = mux.read(i) /* Reads from channel i (returns a value from 0 to 1023) */;
 
-    Serial.print("Potentiometer at channel ");
-    Serial.print(i);
-    Serial.print(" is at ");
-    Serial.print((double) (data) * 100 / 1023);
-    Serial.println("%%");
+    Serial.print("Potentiometer at channel "); Serial.print(i); Serial.print(" is at "); Serial.print((double) (data) * 100 / 1023); Serial.println("%%");
   }
   Serial.println();
 

@@ -11,6 +11,7 @@
  * Author: Nick Lamprianidis (adaptation by Stefano Chizzolini)
  */
 
+#include <Arduino.h>
 #include "Mux.h"
 
 using namespace admux;
@@ -24,11 +25,8 @@ using namespace admux;
 Mux mux(Pin(3, INPUT, PinType::Digital), Pinset(8, 9, 10, 11));
 
 void setup() {
-  // Initializes serial port.
-  Serial.begin(9600);
-  // Waits for serial port to connect (needed for Leonardo only).
-  while (!Serial)
-    ;
+  // Serial port initialization.
+  Serial.begin(9600); while (!Serial) /* Waits for serial port to connect (needed for Leonardo only) */;
 }
 
 /*
@@ -37,18 +35,10 @@ void setup() {
  */
 void loop() {
   byte data;
-  for (byte i = 0; i < mux.channelCount(); ++i) {
-    // Reads from channel i and returns HIGH or LOW.
-    data = mux.read(i);
+  for (byte i = 0; i < mux.channelCount(); i++) {
+    data = mux.read(i) /* Reads from channel i (returns HIGH or LOW) */;
 
-    Serial.print("Push button at channel ");
-    Serial.print(i);
-    Serial.print(" is ");
-    if (data == HIGH) {
-      Serial.println("not pressed");
-    } else if (data == LOW) {
-      Serial.println("pressed");
-    }
+    Serial.print("Push button at channel "); Serial.print(i); Serial.print(" is "); Serial.println(data == LOW ? "pressed" : "not pressed");
   }
   Serial.println();
 

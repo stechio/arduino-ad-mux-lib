@@ -51,12 +51,12 @@ Conversely, *the same signal pin can be physically connected to multiple ICs thr
 
 ## Testing
 
-Project multi-platform building and testing are based on [PlatformIO](https://platformio.org/).
+Project building and testing are based on [PlatformIO](https://platformio.org/).
 
 Run unit tests through this command:
 
 ```
-pio test -e test
+pio test
 ```
 
 ## Repository
