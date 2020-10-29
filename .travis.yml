@@ -22,5 +22,5 @@ env:
 script:
   - set -eo pipefail;
     for example in examples/*; do
-      platformio ci --board=$BOARD --lib=. $example/*.ino;
+      platformio ci --board=$BOARD --lib=. $example/*.ino.cpp;
     done
