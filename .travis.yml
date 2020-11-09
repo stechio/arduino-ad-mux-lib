@@ -21,6 +21,7 @@ env:
 # https://docs.platformio.org/en/latest/core/userguide/cmd_ci.html
 script:
   - set -eo pipefail;
+    pio test;
     for example in examples/*Example; do
       platformio ci --board=$BOARD --lib=. $example/*.ino.cpp;
     done
