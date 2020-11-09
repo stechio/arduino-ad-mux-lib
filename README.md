@@ -7,7 +7,7 @@ This library was forked from project MUX74HC4067 (https://github.com/nlamprian/M
 
 ## Getting started
 
-Currently, all ICs are supported by a common implementation (`Mux`).
+All ICs are supported by a common implementation (`Mux`).
 
 This library provides several examples that demonstrate its functionalities; they all revolve around the same simple life cycle: 
 

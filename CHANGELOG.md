@@ -8,16 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Change author is referenced by nickname (@xxxxxx), as listed in [AUTHORS.md](AUTHORS.md); whenever unspecified, it's @stechio.
 
-## [[Unreleased::feat/dev3](https://github.com/stechio/arduino-ad-mux-lib/tree/feat/dev3)]
+## [[3.0.0](https://github.com/stechio/arduino-ad-mux-lib/releases/tag/3.0.0)] - 2020-11-09
 
-This development iteration focuses on further API simplification (all ICs converged to a common implementation (`Mux`)), fluency (streamlined accessors and mutators), cohesiveness (name collisions prevented by namespace and constants encapsulation into enumerations) and generalization (arbitrary channel cardinality supported).
+This development iteration focuses on API simplification (all ICs converged to a common implementation (`Mux`)), fluency (streamlined accessors and mutators), cohesiveness (name collisions prevented by namespace and constants encapsulation into enumerations) and generalization (arbitrary channel cardinality supported).
 
 ### Added
 - `admux` namespace
 - `Pin` struct: created to encapsulate full pin definitions (as for signal pin)
 - `Pinset` struct: created to gather sets of coordinated pins (as for channel controls).
-- enumerations (`PinType`): created to replace macro constants (type-unsafe and prone to name clashing!)
-- Travis CI configuration (@thijstriemstra)
+- enumerations (`PinType` and anonymous `ERROR_*`): created to replace macro constants (type-unsafe and prone to name clashing!)
+- Continuous integration via Travis (@thijstriemstra)
+- Unit testing via ArduinoFake
 
 ### Changed
 - `Mux`: fluent member naming, generalized control pin array (arbitrary channel cardinality supported)
@@ -33,6 +34,12 @@ This development iteration focuses on further API simplification (all ICs conver
 
 ## [[2.0.1](https://github.com/stechio/arduino-ad-mux-lib/releases/tag/2.0.1)] - 2018-04-16
 
+(OBSOLETE)
+
 ## [[2.0.0](https://github.com/stechio/arduino-ad-mux-lib/releases/tag/2.0.0)] - 2018-04-12
 
+(OBSOLETE)
+
 ## [[1.0.0](https://github.com/stechio/arduino-ad-mux-lib/releases/tag/1.0.0)] - 2018-04-11
+
+(OBSOLETE)

@@ -1,4 +1,4 @@
-/**
+/*-
  * This example demonstrates how to read analog signals.
  *
  * It assumes there are potentiometers connected to the 16 channels of the
@@ -29,7 +29,7 @@ void setup() {
   Serial.begin(9600); while (!Serial) /* Waits for serial port to connect (needed for Leonardo only) */;
 }
 
-/*
+/**
  * Reads the 16 channels and reports on the serial monitor the corresponding
  * value read by the A/D converter.
  */

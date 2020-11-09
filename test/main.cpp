@@ -1,3 +1,17 @@
+/*-
+ * Unit testing.
+ *
+ * ------------------------------------------------------------
+ * Project: arduino-ad-mux-lib
+ * Source: https://github.com/stechio/arduino-ad-mux-lib.git
+ *
+ * Copyright (c) 2018-2020 Stefano Chizzolini (arduino-ad-mux-lib)
+ *
+ * License:
+ *    This library is licensed under the MIT license
+ *    http://www.opensource.org/licenses/mit-license.php
+ */
+
 #include <unity.h>
 #include <Mux.h>
 

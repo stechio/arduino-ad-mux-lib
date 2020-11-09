@@ -1,4 +1,4 @@
-/**
+/*-
  * This example demonstrates how to read digital signals.
  *
  * It assumes there are push buttons with pullup resistors connected to the 16
@@ -29,7 +29,7 @@ void setup() {
   Serial.begin(9600); while (!Serial) /* Waits for serial port to connect (needed for Leonardo only) */;
 }
 
-/*
+/**
  * Reads the 16 channels and reports on the serial monitor if the corresponding
  * push button is pressed.
  */

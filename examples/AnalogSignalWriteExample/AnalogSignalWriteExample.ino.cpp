@@ -1,4 +1,4 @@
-/**
+/*-
  * This example demonstrates how to write PWM signals.
  *
  * It assumes there are LEDs+resistors with the positive lead of the LEDs
@@ -27,14 +27,13 @@ Mux mux(Pin(3, OUTPUT, PinType::Analog), Pinset(8, 9, 10, 11));
 void setup() {
 }
 
-/*
+/**
  * Writes to the 16 channels a PWM output, one after the other (at each next
  * channel, the duty cycle of the PWM increases).
  */
 void loop() {
   for (byte i = 0; i < mux.channelCount(); i++) {
     mux.write(i * 16 + 1, i) /* Connects to channel i and outputs a PWM signal */;
-
     delay(200);
   }
 

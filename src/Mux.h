@@ -1,8 +1,8 @@
-/**
+/*-
  * Project: arduino-ad-mux-lib
  * Source: https://github.com/stechio/arduino-ad-mux-lib.git
  *
- * Copyright (c) 2018 Stefano Chizzolini (arduino-ad-mux-lib)
+ * Copyright (c) 2018-2020 Stefano Chizzolini (arduino-ad-mux-lib)
  * Copyright (c) 2014 Nick Lamprianidis (MUX74HC4067)
  *
  * License:

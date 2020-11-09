@@ -1,4 +1,4 @@
-/**
+/*-
  * This example demonstrates how to combine reading inputs and writing outputs,
  * whether they are digital or analog.
  *
@@ -37,7 +37,7 @@ Mux mux(Pinset(7, 8, 9));
 void setup() {
 }
 
-/*
+/**
  * Reads the state of the push buttons and the potentiometers and outputs to
  * the LEDs a corresponding value:
  *   * HIGH is the buttons are pressed, LOW otherwise;

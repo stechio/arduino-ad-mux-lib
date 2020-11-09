@@ -1,4 +1,4 @@
-/**
+/*-
  * This example demonstrates how to write digital signals.
  *
  * It assumes there are LEDs+resistors with the positive lead of the LEDs
@@ -27,13 +27,12 @@ Mux mux(Pin(3, OUTPUT, PinType::Digital), Pinset(8, 9, 10, 11));
 void setup() {
 }
 
-/*
+/**
  * Writes to the 16 channels a HIGH value, one after the other.
  */
 void loop() {
   for (byte i = 0; i < mux.channelCount(); i++) {
     mux.write(HIGH, i) /* Connects to channel i and writes HIGH */;
-
     delay(25);
   }
 
